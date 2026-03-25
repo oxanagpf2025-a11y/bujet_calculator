@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Мини-приложение для учета личного бюджета с аналитикой и фильтрами.">
+  <title>Budget Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="container hero__content">
+      <div class="hero__text">
+        <p class="hero__badge">Личный финансовый помощник</p>
+        <h1>Контролируйте бюджет и увеличивайте сбережения</h1>
+        <p class="hero__description">
+          Удобно добавляйте доходы и расходы, фильтруйте операции по категориям,
+          смотрите баланс и сохраняйте данные прямо в браузере.
+        </p>
+        <a class="btn btn--primary" href="#calculator">Перейти к калькулятору</a>
+      </div>
+      <div class="hero__card">
+        <h3>Почему это удобно</h3>
+        <ul>
+          <li>Быстрый учет операций</li>
+          <li>Мгновенная аналитика по бюджету</li>
+          <li>Экспорт данных в CSV</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="benefits">
+      <div class="container">
+        <h2>Преимущества</h2>
+        <div class="benefits__grid">
+          <article class="benefit-card">
+            <h3>Простота</h3>
+            <p>Все операции в одном месте: добавление, удаление, фильтрация и очистка.</p>
+          </article>
+          <article class="benefit-card">
+            <h3>Надежность</h3>
+            <p>Данные автоматически сохраняются в localStorage и не теряются при перезагрузке.</p>
+          </article>
+          <article class="benefit-card">
+            <h3>Гибкость</h3>
+            <p>Три темы интерфейса и экспорт в CSV для последующего анализа.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculator" class="calculator">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Калькулятор бюджета</h2>
+          <div class="theme-switcher">
+            <span>Тема:</span>
+            <button class="theme-btn is-active" data-theme="light" type="button">Light</button>
+            <button class="theme-btn" data-theme="dark" type="button">Dark</button>
+            <button class="theme-btn" data-theme="purple" type="button">Purple</button>
+          </div>
+        </div>
+
+        <div class="summary">
+          <article class="summary-card">
+            <p>Доходы</p>
+            <strong id="totalIncome">0 ₽</strong>
+          </article>
+          <article class="summary-card">
+            <p>Расходы</p>
+            <strong id="totalExpense">0 ₽</strong>
+          </article>
+          <article class="summary-card">
+            <p>Баланс</p>
+            <strong id="balance">0 ₽</strong>
+          </article>
+          <article class="summary-card">
+            <p>Сбережения</p>
+            <strong id="savingsRate">0%</strong>
+          </article>
+        </div>
+
+        <div class="calculator__grid">
+          <form id="transactionForm" class="panel">
+            <h3>Добавить операцию</h3>
+
+            <label for="type">Тип</label>
+            <select id="type" name="type" required>
+              <option value="">Выберите тип</option>
+              <option value="income">Доход</option>
+              <option value="expense">Расход</option>
+            </select>
+
+            <label for="category">Категория</label>
+            <input id="category" name="category" type="text" placeholder="Например: Зарплата, Еда" required>
+
+            <label for="amount">Сумма</label>
+            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="Например: 15000" required>
+
+            <label for="date">Дата</label>
+            <input id="date" name="date" type="date" required>
+
+            <label for="comment">Комментарий</label>
+            <textarea id="comment" name="comment" rows="3" placeholder="Дополнительная информация"></textarea>
+
+            <button class="btn btn--primary" type="submit">Добавить операцию</button>
+          </form>
+
+          <div class="panel">
+            <div class="panel__top">
+              <h3>Список операций</h3>
+              <div class="panel__actions">
+                <button id="exportCsvBtn" class="btn btn--ghost" type="button">Экспорт CSV</button>
+                <button id="clearAllBtn" class="btn btn--danger" type="button">Очистить все</button>
+              </div>
+            </div>
+
+            <div class="filters">
+              <div>
+                <label for="filterType">Фильтр по типу</label>
+                <select id="filterType">
+                  <option value="all">Все</option>
+                  <option value="income">Доходы</option>
+                  <option value="expense">Расходы</option>
+                </select>
+              </div>
+              <div>
+                <label for="filterCategory">Фильтр по категории</label>
+                <select id="filterCategory">
+                  <option value="all">Все категории</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Тип</th>
+                    <th>Категория</th>
+                    <th>Сумма</th>
+                    <th>Дата</th>
+                    <th>Комментарий</th>
+                    <th>Действие</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTableBody">
+                  <tr>
+                    <td colspan="6" class="empty">Операций пока нет</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
